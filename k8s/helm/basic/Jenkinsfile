@@ -1,4 +1,4 @@
-def deployName = ""
+def deployName = "test"
 def deployNamespace = ""
 def imageName = "localhost:32000/kubectl"
 def imageTag = "1.1"
@@ -30,7 +30,7 @@ volumes: [
         container('kubectl') {
             checkout scm
             sh '''
-                pwd && ls && helm template k8s/helm/basic/chart/
+                helm template --set project.name=$deployName,project.namespace=test,project.deploy.name=test,project.pod.image.name=test,project.pod.image.tag=1.0 k8s/helm/basic/chart/
             '''
         }
     }
