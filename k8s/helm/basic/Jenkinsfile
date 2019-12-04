@@ -1,7 +1,7 @@
 def deployName = ""
 def deployNamespace = ""
 def imageName = "localhost:32000/kubectl"
-def imageTag = "1.0"
+def imageTag = "1.1"
 def podReplicaCount = "3"
 def serviceType = "ClusterIP" // None, NodePort, ClusterIP, LoadBalancer
 def servicePorts = []
@@ -9,7 +9,7 @@ def servicePorts = []
 podTemplate(cloud: 'kubernetes', containers: [
     containerTemplate(
         name: 'kubectl',
-        image: 'localhost:32000/kubectl:1.0',
+        image: 'localhost:32000/kubectl:1.1',
         ttyEnabled: true,
         privileged: false,
         alwaysPullImage: false,
@@ -28,8 +28,9 @@ volumes: [
   node(POD_LABEL)  {
     stage('Run maven') {
         container('kubectl') {
+            checkout scm
             sh '''
-                kubectl get po 
+                helm template chart/
             '''
         }
     }
