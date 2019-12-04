@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: {{ .Values.project.deploy.name }}
-        image: {{ .Values.project.image.name }}:{{ .Values.project.image.tag }}
+        image: {{ .Values.project.pod.image.name }}:{{ .Values.project.pod.image.tag }}
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: {{ .Values.project.portNumber }}
+        - containerPort: 3000
