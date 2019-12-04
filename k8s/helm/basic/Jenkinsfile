@@ -1,41 +1,37 @@
-pipeline {
-  
-  agent any
-  
-  parameters {
-    string(description: 'Deploy Name', name: 'deployName', defaultValue: '')
-    string(description: 'Image Name', name: 'imageName', defaultValue: '')
-    string(description: 'Image Tag', name: 'imageTag', defaultValue: '' )
-    string(description: 'Pod Replica Count', name: 'podReplicaCount', defaultValue: '3' )
-  }
-    
-  environment {
-    IMG_TAG = "${params.imageTag.trim() == '' ? env.BUILD_NUMBER : params.imageTag }"
-  }
+def deployName = ""
+def deployNamespace = ""
+def imageName = "localhost:32000/kubectl"
+def imageTag = "1.0"
+def podReplicaCount = "3"
+def serviceType = "ClusterIP" // None, NodePort, ClusterIP, LoadBalancer
+def servicePorts = []
 
-  stages {
-    stage('init') {
-      steps{
-        checkout scm
-      }
-    }
-
-    stage('build') {
-      steps{
-        sh "mvn -Dmaven.test.skip=true package && docker build -t gcr.io/${params.googleProjectId}/${params.imageName}:${env.IMG_TAG} ."
-      }
-    }
-
-    stage('push') {
-      steps{
-        sh "docker push gcr.io/${params.googleProjectId}/${params.imageName}:${env.IMG_TAG}"
-      }
-    }
-
-    stage('deploy'){
-      steps{
-        sh "INGRESS_HOST=\$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}') && helm template kubernetes/ --set google.project.id=${params.googleProjectId} --set project.imageName=${params.imageName} --set project.imageTag=${env.IMG_TAG} --set google.project.ingressgatewayIp=\$INGRESS_HOST | kubectl apply -f - "
-      }
+podTemplate(cloud: 'kubernetes', containers: [
+    containerTemplate(
+        name: 'kubectl',
+        image: 'localhost:32000/kubectl:1.0',
+        ttyEnabled: true,
+        privileged: false,
+        alwaysPullImage: false,
+        workingDir: '/home/jenkins/agent',
+        resourceRequestCpu: '50m',
+        resourceLimitCpu: '100m',
+        resourceRequestMemory: '100Mi',
+        resourceLimitMemory: '200Mi',
+        command: 'cat'
+    )
+],
+volumes: [
+    configMapVolume(mountPath: '/home/jenkins/agent/.kube', configMapName: 'jenkins-cluster-master')
+]
+) {
+  node(POD_LABEL)  {
+    stage('Run maven') {
+        container('kubectl') {
+            sh '''
+                kubectl get po 
+            '''
+        }
     }
   }
 }
