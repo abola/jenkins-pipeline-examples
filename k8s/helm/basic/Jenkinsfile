@@ -30,7 +30,7 @@ volumes: [
         container('kubectl') {
             checkout scm
             sh '''
-                pwd && ls && helm template chart/
+                pwd && ls && helm template k8s/helm/basic/chart/
             '''
         }
     }
