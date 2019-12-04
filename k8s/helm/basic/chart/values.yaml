@@ -1,0 +1,5 @@
+image:
+  imageName:
+  imageTag:
+pods:
+  replicas: 3
