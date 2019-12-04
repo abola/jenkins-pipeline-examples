@@ -29,9 +29,7 @@ volumes: [
     stage('Run maven') {
         container('kubectl') {
             checkout scm
-            sh '''
-                helm template --set project.name=$deployName,project.namespace=test,project.deploy.name=test,project.pod.image.name=test,project.pod.image.tag=1.0 k8s/helm/basic/chart/
-            '''
+            sh "helm template --set project.name=${deployName},project.namespace=test,project.deploy.name=test,project.pod.image.name=test,project.pod.image.tag=1.0 k8s/helm/basic/chart/"
         }
     }
   }
