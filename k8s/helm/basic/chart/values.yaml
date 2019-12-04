@@ -1,5 +1,13 @@
-image:
-  imageName:
-  imageTag:
-pods:
-  replicas: 3
+project:
+  namespace:
+  deploy:
+    name:
+  pod:
+    image:
+      name:
+      tag:
+    replicas: 3
+  service:
+    type: ClusterIP
+    nodePort: 
+    servicePort:    
