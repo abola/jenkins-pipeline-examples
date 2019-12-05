@@ -1,5 +1,5 @@
-def deployName = "yourApplicationName"
-def deployNamespace = "yourTeamSpace"
+def deployName = "your-application-name"
+def deployNamespace = "your-team-space"
 def imageName = "localhost:32000/app"
 def imageTag = "1.0" // image's tag
 def podReplicaCount = "3"
