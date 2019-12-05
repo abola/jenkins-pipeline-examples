@@ -14,6 +14,6 @@ def serviceType = "ClusterIP" // None, NodePort, ClusterIP, LoadBalancer
 def ports = "3000"
 def nodePort = "" // if serviceType is NodePort
 def targetPort = ""
-``
+```
 
 存檔後，將此目錄，含子錄目的所有內容，拷貝一份至其它的 git repository ，並交由Jenkins 透過 SCM 拉取執行即可
