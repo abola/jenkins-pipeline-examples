@@ -32,7 +32,6 @@ volumes: [
       container('kubectl') {
         checkout scm
         sh """
-          kubectl create namespace ${deployNamespace} 
           helm template \
             --set project.name=${deployName} \
             --set project.namespace=${deployName} \
