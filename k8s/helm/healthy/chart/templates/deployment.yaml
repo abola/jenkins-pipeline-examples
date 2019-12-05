@@ -5,6 +5,10 @@ metadata:
   namespace: {{ .Values.project.namespace }}
 spec:
   replicas: {{ .Values.project.pod.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.project.name }}
+      name: {{ .Values.project.name }}  
   template:
     metadata:
       labels:
