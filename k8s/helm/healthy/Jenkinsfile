@@ -1,0 +1,46 @@
+def name = "your-application-name"
+def namespace = "your-team-space"
+def imageName = "localhost:32000/app"
+def imageTag = "1.0" // image's tag
+def podReplicaCount = "3"
+def serviceType = "ClusterIP" // None, NodePort, ClusterIP, LoadBalancer
+def servicePorts = ""
+def nodePort = "" // if serviceType is NodePort
+def targetPort = ""
+
+podTemplate(cloud: 'kubernetes', containers: [
+    containerTemplate(
+        name: 'kubectl',
+        image: 'localhost:32000/kubectl:1.1',
+        ttyEnabled: true,
+        privileged: false,
+        alwaysPullImage: false,
+        workingDir: '/home/jenkins/agent',
+        resourceRequestCpu: '50m',
+        resourceLimitCpu: '100m',
+        resourceRequestMemory: '100Mi',
+        resourceLimitMemory: '200Mi',
+        command: 'cat'
+    )
+],
+volumes: [
+    configMapVolume(mountPath: '/home/jenkins/agent/.kube', configMapName: 'jenkins-cluster-master')
+]
+) {
+  node(POD_LABEL)  {
+    stage('Run maven') {
+      container('kubectl') {
+        checkout scm
+        sh """
+          helm template \
+            --set project.name=${name} \
+            --set project.namespace=${namespace} \
+            --set project.pod.image.name=${imageName} \
+            --set project.pod.image.tag=${imageTag} \
+            --set project.pod.replica=${podReplicaCount} \
+            k8s/helm/basic/chart/ 
+        """
+      }
+    }
+  }
+}

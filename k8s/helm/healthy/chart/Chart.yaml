@@ -1,0 +1,4 @@
+apiVersion: v1
+description: about this application
+name: application-name-chart
+version: 1.0

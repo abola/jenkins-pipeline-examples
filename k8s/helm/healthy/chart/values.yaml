@@ -1,0 +1,14 @@
+project:
+  namespace:
+  name:
+  pod:
+    image:
+      name:
+      tag:
+    replicas: 3
+  service:
+    name: http
+    type: ClusterIP
+    port:
+    nodePort: 
+    targetPort:    

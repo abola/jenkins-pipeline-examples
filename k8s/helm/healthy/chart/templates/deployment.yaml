@@ -1,0 +1,18 @@
+apiVersion: extensions/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.project.name }}-deploy
+  namespace: {{ .Values.project.namespace }}
+spec:
+  replicas: {{ .Values.project.pod.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.project.name }}
+    spec:
+      containers:
+      - name: {{ .Values.project.name }}
+        image: {{ .Values.project.pod.image.name }}:{{ .Values.project.pod.image.tag }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
