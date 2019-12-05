@@ -1,10 +1,12 @@
-def deployName = "test"
-def deployNamespace = ""
-def imageName = "localhost:32000/kubectl"
-def imageTag = "1.1"
+def deployName = "yourApplicationName"
+def deployNamespace = "yourTeamSpace"
+def imageName = "localhost:32000/app"
+def imageTag = "1.0" // image's tag
 def podReplicaCount = "3"
 def serviceType = "ClusterIP" // None, NodePort, ClusterIP, LoadBalancer
-def servicePorts = []
+def servicePorts = ""
+def nodePort = "" // if serviceType is NodePort
+def targetPort = ""
 
 podTemplate(cloud: 'kubernetes', containers: [
     containerTemplate(
@@ -27,10 +29,20 @@ volumes: [
 ) {
   node(POD_LABEL)  {
     stage('Run maven') {
-        container('kubectl') {
-            checkout scm
-            sh "helm template --set project.name=${deployName},project.namespace=test,project.deploy.name=test,project.pod.image.name=test,project.pod.image.tag=1.0 k8s/helm/basic/chart/"
-        }
+      container('kubectl') {
+        checkout scm
+        sh """
+          kubectl create namespace ${deployNamespace} 
+          helm template \
+            --set project.name=${deployName} \
+            --set project.namespace=${deployName} \
+            --set project.deploy.name=${deployName} \
+            --set project.pod.image.name=${imageName} \
+            --set project.pod.image.tag=${imageTag} \
+            --set project.pod.replica=${podReplicaCount} \
+            k8s/helm/basic/chart/ 
+        """
+      }
     }
   }
 }
