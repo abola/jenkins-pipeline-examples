@@ -1,13 +1,14 @@
 project:
   namespace:
-  deploy:
-    name:
+  name:
   pod:
     image:
       name:
       tag:
     replicas: 3
   service:
+    name: http
     type: ClusterIP
+    port:
     nodePort: 
-    servicePort:    
+    targetPort:    
