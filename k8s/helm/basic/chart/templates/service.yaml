@@ -12,9 +12,9 @@ spec:
 {{- if .Values.project.service.targetPort }}    
     targetPort: {{ .Values.project.service.targetPort }}
 {{- end }}
-{{- if (and (eq .Values.project.service.servicetype "NodePort") (not (empty .Values.project.service.nodePort )))}}
+{{if (and (eq .Values.project.service.servicetype "NodePort") (not (empty .Values.project.service.nodePort )))}}
     nodePort: {{ .Values.project.service.nodePort }}
-{{- end }}
+{{end }}
     name: {{ .Values.project.service.name }}
   selector:
     app: {{ .Values.project.deploy.name }}
