@@ -8,7 +8,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.project.name }}
-      name: {{ .Values.project.name }}  
   template:
     metadata:
       labels:
@@ -20,16 +19,16 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
-    livenessProbe:
-      exec:
-        command:
-        - cat
-        - /
-      initialDelaySeconds: 3
-      periodSeconds: 3
-    readinessProbe:
-      httpGet:
-        path: /health
-        port: 3000
-      initialDelaySeconds: 3
-      periodSeconds: 3
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /alive
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 3
+          periodSeconds: 3
