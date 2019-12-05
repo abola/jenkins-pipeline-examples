@@ -1,6 +1,6 @@
-# Basic
+# Healthy
 
-這是一個最基礎也是最常見，僅有 Deployment + Service 的基本配置
+這個範例是基於 basic 下，再增加 Liveness probe 及 Readiness probe 的示範
 
 參考此配置，您只需要調整檔案 `Jenkinsfile` 中，最上方的參數，如下
 
