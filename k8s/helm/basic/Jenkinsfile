@@ -1,5 +1,5 @@
-def deployName = "your-application-name"
-def deployNamespace = "your-team-space"
+def name = "your-application-name"
+def namespace = "your-team-space"
 def imageName = "localhost:32000/app"
 def imageTag = "1.0" // image's tag
 def podReplicaCount = "3"
@@ -33,9 +33,8 @@ volumes: [
         checkout scm
         sh """
           helm template \
-            --set project.name=${deployName} \
-            --set project.namespace=${deployName} \
-            --set project.deploy.name=${deployName} \
+            --set project.name=${name} \
+            --set project.namespace=${namespace} \
             --set project.pod.image.name=${imageName} \
             --set project.pod.image.tag=${imageTag} \
             --set project.pod.replica=${podReplicaCount} \
